@@ -30,8 +30,8 @@ internal class Mat4Test {
         for (x in -20.0..20.0 step 0.5) {
             for (y in -20.0..20.0 step 0.5) {
                 for (z in -20.0..20.0 step 0.5) {
-                    val jomlMatrix = Matrix4d().translate(x, y, z)
-                    val mat4 = Mat4.IDENTITY.translate(x, y, z)
+                    val jomlMatrix = Matrix4d().translate(x, y, z).translate(x, y, z)
+                    val mat4 = Mat4.IDENTITY.translate(x, y, z).translate(x, y, z)
 
                     assertSame(jomlMatrix, mat4)
                 }
@@ -60,6 +60,17 @@ internal class Mat4Test {
 
     @Test
     fun mulVector() {
+        val jomlMatrix = Matrix4d().translate(20.0, 10.0, -20.0).rotateX(1.0)
+        val mat4 = Mat4.IDENTITY.translate(20.0, 10.0, -20.0).rotateX(1.0)
+
+        assertSame(jomlMatrix.transformPosition(Vector3d(1.0, 1.0, 1.0)), mat4 * Pos(1.0, 1.0, 1.0))
+        assertSame(jomlMatrix.transformPosition(Vector3d(1.0, 5.0, 1.0)), mat4 * Pos(1.0, 5.0, 1.0))
+    }
+
+    @Test
+    fun `translate - rotate - negate - transform position`() {
+
+
         val jomlMatrix = Matrix4d().translate(20.0, 10.0, -20.0).rotateX(1.0)
         val mat4 = Mat4.IDENTITY.translate(20.0, 10.0, -20.0).rotateX(1.0)
 

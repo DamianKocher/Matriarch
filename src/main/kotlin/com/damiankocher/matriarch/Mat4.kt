@@ -14,14 +14,7 @@ data class Mat4(
 ) {
 
     fun translate(x: Double, y: Double, z: Double): Mat4 {
-        val translationMatrix = Mat4(
-            1.0, 0.0, 0.0, x,
-            0.0, 1.0, 0.0, y,
-            0.0, 0.0, 1.0, z,
-            0.0, 0.0, 0.0, 1.0
-        )
-
-        return this * translationMatrix
+        return this * translation(x, y, z)
     }
 
     fun rotate(pitch: Double, yaw: Double, roll: Double): Mat4 {
@@ -82,6 +75,7 @@ data class Mat4(
         )
     }
 
+    // http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q9
     operator fun plus(right: Mat4): Mat4 {
         return Mat4(
             m00 + right.m00, m01 + right.m01, m02 + right.m02, m03 + right.m03,
@@ -91,6 +85,7 @@ data class Mat4(
         )
     }
 
+    // http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q10
     operator fun minus(right: Mat4): Mat4 {
         return Mat4(
             m00 - right.m00, m01 - right.m01, m02 - right.m02, m03 - right.m03,
@@ -100,6 +95,7 @@ data class Mat4(
         )
     }
 
+    // http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q11
     operator fun times(right: Mat4): Mat4 {
         val nm00 = (m00 * right.m00) + (m01 * right.m10) + (m02 * right.m20) + (m03 * right.m30)
         val nm01 = (m00 * right.m01) + (m01 * right.m11) + (m02 * right.m21) + (m03 * right.m31)
@@ -129,6 +125,7 @@ data class Mat4(
         )
     }
 
+    // http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q13
     operator fun times(right: Pos): Pos {
         // Since we're multiplying a position W is 1
 
@@ -139,6 +136,7 @@ data class Mat4(
         return Pos(x, y, z, right.yaw(), right.pitch)
     }
 
+    // http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q13
     operator fun times(right: Vec): Vec {
         // Since we're multiplying a direction W is 0
 
@@ -294,6 +292,8 @@ data class Mat4(
     }
 
     companion object {
+
+        // http://www.opengl-tutorial.org/assets/faq_quaternions/index.html#Q6
         val IDENTITY = Mat4(
             1.0, 0.0, 0.0, 0.0,
             0.0, 1.0, 0.0, 0.0,
@@ -311,6 +311,15 @@ data class Mat4(
                 .translate(posX, posY, posZ)
                 .rotate(rotX, rotY, rotZ)
                 .scale(scaleX, scaleY, scaleZ)
+        }
+
+        fun translation(x: Double, y: Double, z: Double): Mat4 {
+            return Mat4(
+                1.0, 0.0, 0.0, x,
+                0.0, 1.0, 0.0, y,
+                0.0, 0.0, 1.0, z,
+                0.0, 0.0, 0.0, 1.0
+            )
         }
     }
 }
