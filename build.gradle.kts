@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.6.21"
     id("maven-publish")
@@ -25,14 +27,10 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "17"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "17"
-    }
-}
+val jvmTarget = JavaVersion.VERSION_17.toString()
+val compileKotlin: KotlinCompile by tasks
+
+compileKotlin.kotlinOptions.jvmTarget = jvmTarget
 
 publishing {
     publications.create<MavenPublication>("maven") {
