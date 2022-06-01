@@ -11,8 +11,8 @@ version = "0.0.1"
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://jitpack.io") }
-    maven { url = uri("https://oss.sonatype.org/content/repositories/snapshots/") }
+    maven("https://jitpack.io")
+    maven("https://oss.sonatype.org/content/repositories/snapshots/")
 }
 
 dependencies {
@@ -31,6 +31,12 @@ val jvmTarget = JavaVersion.VERSION_17.toString()
 val compileKotlin: KotlinCompile by tasks
 
 compileKotlin.kotlinOptions.jvmTarget = jvmTarget
+
+kotlin {
+    jvmToolchain {
+        (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(jvmTarget))
+    }
+}
 
 publishing {
     publications.create<MavenPublication>("maven") {
